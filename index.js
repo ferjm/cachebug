@@ -9,3 +9,10 @@ if ('serviceWorker' in navigator) {
     console.log('ServiceWorker registration failed: ', err);
   });
 }
+
+window.addEventListener('DOMContentLoaded', function() {
+  var button = document.getElementById('delete');
+  button.addEventListener('click', function() {
+    navigator.serviceWorker.controller.postMessage('delete');
+  });
+});

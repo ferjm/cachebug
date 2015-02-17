@@ -36,3 +36,12 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
+
+self.addEventListener('message', function() {
+  debug('message');
+  caches.open('cache-v0').then(function(cache) {
+    cache.keys().then(function(keys) {
+      debug('keys ' + keys);
+    });
+  });
+});
