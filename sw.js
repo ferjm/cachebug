@@ -5,6 +5,34 @@ function debug(msg) {
   console.log('Service Worker - ', msg);
 }
 
-addEventListener('install', function() {
+self.addEventListener('install', function(event) {
   debug('install');
+  event.waitUntil(
+    caches.open('cache-v0').then(function(cache) {
+      debug('Cache opened');
+      return cache.addAll(['index.html', 'index.js']).then(function() {
+        debug('Resources cached');
+      }, function(e) {
+        debug('Could not cache resources ' + e);
+      });
+    })
+  );
+});
+
+self.addEventListener('activate', function() {
+  debug('activate');
+});
+
+self.addEventListener('fetch', function(event) {
+  debug('fetch ' + event.request.url);
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      if (response) {
+        debug(event.request.url + ' in cache');
+      } else {
+        debug(event.request.url + ' NOT in cache');
+      }
+      return response || fetch(event.request);
+    })
+  );
 });
