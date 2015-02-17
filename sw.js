@@ -10,6 +10,7 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open('cache-v0').then(function(cache) {
       debug('Cache opened');
+      cache.put('aKey', new Response('whatever'));
       return cache.addAll(['index.html', 'index.js']).then(function() {
         debug('Resources cached');
       }, function(e) {
@@ -40,8 +41,8 @@ self.addEventListener('fetch', function(event) {
 self.addEventListener('message', function() {
   debug('message');
   caches.open('cache-v0').then(function(cache) {
-    cache.keys().then(function(keys) {
-      debug('keys ' + keys);
+    cache.delete('aKey').then(function(deleted) {
+      debug('aKey deleted? ' + deleted);
     });
   });
 });
