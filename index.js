@@ -13,6 +13,12 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('DOMContentLoaded', function() {
   var button = document.getElementById('delete');
   button.addEventListener('click', function() {
-    navigator.serviceWorker.controller.postMessage('delete');
+    navigator.serviceWorker.ready.then(function(registration) {
+      var worker = registration.installing ||
+                   registration.active ||
+                   registration.waiting;
+      debug('Worker ' + worker);
+      worker.postMessage('deletethemall');
+    });
   });
 });
